@@ -1,0 +1,54 @@
+version: '3.8'
+services:
+
+  postgis:
+    container_name: amw2_postgis
+    image: kartoza/postgis
+    volumes:
+      - postgresdb:/var/lib/postgresql
+    env_file:
+      - './postgres/postgres.env'
+    networks:
+      - backend
+    ports:
+      - "25432:5432"
+
+  pgadmin:
+    container_name: awm2_pgadmin
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    env_file:
+      - './postgres/pgadmin.env'
+    networks:
+      - backend
+
+  nginx:
+    container_name: awm2_nginx
+    build:
+      context: ./
+      dockerfile: ./nginx/Dockerfile
+    networks:
+      - backend
+    ports:
+      - "80:80"
+      - "443:443"
+
+  django:
+    container_name: awm2_django
+    build:
+      context: ./
+      dockerfile: ./django_backend/Dockerfile
+    networks:
+      - backend
+    ports:
+      - "8000:8000"
+  #   env_file:
+  #     - 'django.env'
+
+networks:
+  backend:
+
+volumes:
+  postgresdb:
+  pgadmin:

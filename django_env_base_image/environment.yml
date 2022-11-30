@@ -1,0 +1,12 @@
+name: env
+channels:
+  - conda-forge
+dependencies:
+  - gdal=3.4.3
+  - pyproj
+  - requests
+  - psycopg2
+  - django
+  - django-cors-headers
+  - djangorestframework-gis
+  - djangorestframework
