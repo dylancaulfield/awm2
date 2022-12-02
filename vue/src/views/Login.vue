@@ -3,7 +3,7 @@
 
     <v-container class="max-width">
 
-        <v-card>
+        <v-card class="mt-6">
 
             <v-card-text>
 
@@ -13,10 +13,17 @@
 
                     <v-divider class="mb-6"></v-divider>
 
-                    <v-text-field required filled label="Email" v-model="user.username" :rules="[v => !!v || 'Email is required']"></v-text-field>
+                    <v-text-field required filled label="Email" v-model="user.email" :rules="[v => !!v || 'Email is required']"></v-text-field>
                     <v-text-field required filled type="password" label="Password" v-model="user.password" :rules="[v => !!v || 'Password is required']"></v-text-field>
 
                     <v-btn @click="performLogin" color="primary" >Login</v-btn>
+
+                    <v-divider class="mb-6 mt-6"></v-divider>
+
+                    <p>
+                        New to Geo Timesheet?
+                        <router-link to="/register">Create an account</router-link>
+                    </p>
 
                 </v-form>
 

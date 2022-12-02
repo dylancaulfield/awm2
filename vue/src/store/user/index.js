@@ -7,8 +7,8 @@ export default {
     namespaced: true,
 
     state: {
-        user: localStorage.getItem("user") ? localStorage.getItem("user") : {},
-        authToken: localStorage.getItem("authToken"),
+        user: {name: "Yvonne"},
+        authToken: null
     },
 
     mutations: {
@@ -26,7 +26,7 @@ export default {
             state.authToken = null;
             localStorage.setItem("user", null);
             localStorage.setItem("authToken", null);
-        }
+        },
 
     },
 
@@ -55,7 +55,7 @@ export default {
 
             context.commit("clearUser");
 
-        }
+        },
 
     }
 };

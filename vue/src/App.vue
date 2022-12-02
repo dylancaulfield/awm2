@@ -8,11 +8,19 @@
         >
 
             <router-link class="white--text" style="text-decoration: none" to="/">
-                <v-app-bar-title>AWM2</v-app-bar-title>
+                <v-app-bar-title>
+                    <span class="font-weight-bold">Geo</span>Timesheet
+                </v-app-bar-title>
             </router-link>
 
 
             <v-spacer></v-spacer>
+
+            <router-link to="/account">
+                <v-btn icon>
+                    <v-icon>mdi-account</v-icon>
+                </v-btn>
+            </router-link>
 
 
         </v-app-bar>
