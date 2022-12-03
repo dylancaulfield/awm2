@@ -25,9 +25,7 @@ SECRET_KEY = 'django-insecure-mpb08#&^fd+ze!b$e6^t(8w%-g1_a=pr)gus_0hii2-150ky*%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DOCKER", '0').lower() == '0'
 
-ALLOWED_HOSTS = [
-    "host.docker.internal"
-]
+ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://localhost",

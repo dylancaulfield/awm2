@@ -8,4 +8,4 @@ COPY ./nginx/mkcert.pem /etc/nginx/pem/mkcert.pem
 COPY ./nginx/mkcert-key.pem /etc/nginx/pem/mkcert-key.pem
 
 # Copy static files from vue dist
-COPY ./vue/dist /var/www;
+COPY ./vue/dist /var/www

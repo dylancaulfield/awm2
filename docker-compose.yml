@@ -10,8 +10,6 @@ services:
       - './postgres/postgres.env'
     networks:
       - backend
-    ports: # localhost only
-      - "25432:5432"
 
   pgadmin:
     container_name: awm2_pgadmin
@@ -20,6 +18,14 @@ services:
       - pgadmin:/var/lib/pgadmin
     env_file:
       - './postgres/pgadmin.env'
+    networks:
+      - backend
+
+  django:
+    container_name: awm2_django
+    build:
+      context: ./
+      dockerfile: ./django_backend/Dockerfile
     networks:
       - backend
 
@@ -33,14 +39,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-
-  django:
-    container_name: awm2_django
-    build:
-      context: ./
-      dockerfile: ./django_backend/Dockerfile
-    networks:
-      - backend
 
 networks:
   backend:
