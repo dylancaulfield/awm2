@@ -49,7 +49,7 @@
 
                 <div :key="org.id" v-for="org in organisations">
 
-                    <LPolygon :key="loc.id" v-for="loc in org.locations" :lat-lngs="loc.polygon"></LPolygon>
+                    <LPolygon :key="loc.id" v-for="loc in org.locations" :lat-lngs="loc.bounds"></LPolygon>
 
                 </div>
 
@@ -80,7 +80,7 @@
 //import L from "leaflet"
 import {LMap, LTileLayer, LMarker, LPolygon} from "vue2-leaflet";
 //import {latLng} from "leaflet";
-import {mapGetters, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 
 
 export default {
@@ -103,6 +103,15 @@ export default {
             coords: []
         }
     },
+
+    async beforeMount() {
+
+        if (localStorage.getItem("token")){
+            await this.fetchOrganisations();
+        }
+
+    },
+
     methods: {
 
         savePosition(e) {
@@ -123,6 +132,8 @@ export default {
             // }
 
         },
+
+        ...mapActions("organisations", ["fetchOrganisations"])
 
     },
     computed: {

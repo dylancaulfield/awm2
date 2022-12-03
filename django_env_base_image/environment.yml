@@ -10,3 +10,4 @@ dependencies:
   - django-cors-headers
   - djangorestframework-gis
   - djangorestframework
+  - gunicorn

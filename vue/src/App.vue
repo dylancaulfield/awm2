@@ -37,6 +37,24 @@
 
             <v-spacer></v-spacer>
 
+            <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        icon
+                        v-show="isAuthenticated"
+                    >
+                        <v-icon>mdi-account</v-icon>
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-item @click="logout" style="cursor:pointer;">
+                        <v-list-item-title>Logout</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+
             <router-link to="/settings" v-show="!isSettings">
                 <v-btn icon>
                     <v-icon>mdi-cog-outline</v-icon>
@@ -54,7 +72,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: 'App',
@@ -75,11 +93,12 @@ export default {
         ]
     }),
 
-    beforeMount() {
+    mounted() {
 
-        sessionStorage.setItem("user", {
-            name: "dylan"
-        });
+        // if(localStorage.getItem("token")){
+        //     this.fetchUser();
+        //     this.fetchOrganisations();
+        // }
 
     },
 
@@ -89,10 +108,22 @@ export default {
             return this.$route.path.startsWith("/settings");
         },
 
+        ...mapGetters("user", ["isAuthenticated"]),
+
     },
 
     methods: {
-        ...mapActions("user", ["fetchUser"])
+
+        async logout(){
+
+            await this.user.logout();
+            await this.$router.push("/")
+
+        },
+
+        ...mapActions("user", ["fetchUser", "logout"]),
+        ...mapActions("organisations", ["fetchOrganisations"])
+
     }
 
 };

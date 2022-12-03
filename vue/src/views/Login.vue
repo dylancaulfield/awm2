@@ -1,45 +1,51 @@
 <template>
-<div>
+    <div>
 
-    <v-container class="max-width">
+        <v-container class="max-width">
 
-        <v-alert dismissible type="info" v-show="this.$route.query.redirect" class="mb-6 mt-6">You must be authenticated to access settings</v-alert>
+            <v-alert type="error" v-show="this.error" class="mb-6 mt-6">Oops! No user found with those
+                credentials
+            </v-alert>
 
-        <v-card class="mt-6">
+            <v-alert dismissible type="info" v-show="this.$route.query.redirect" class="mb-6 mt-6">You must be
+                authenticated to access settings
+            </v-alert>
 
-            <v-card-text>
+            <v-card class="mt-6">
 
-                <v-form ref="loginForm" class="pt-4">
+                <v-card-text>
 
-                    <h1 class="mb-6">Login</h1>
+                    <v-form @submit="performLogin" ref="loginForm" class="pt-4">
 
-                    <v-divider class="mb-6"></v-divider>
+                        <h1 class="mb-6">Login</h1>
 
-                    <v-text-field required filled label="Email" v-model="user.email" :rules="[v => !!v || 'Email is required']"></v-text-field>
-                    <v-text-field required filled type="password" label="Password" v-model="user.password" :rules="[v => !!v || 'Password is required']"></v-text-field>
+                        <v-divider class="mb-6"></v-divider>
 
-                    <v-btn @click="performLogin" color="primary" >Login</v-btn>
+                        <v-text-field required filled type="email" label="Email" v-model="user.username"
+                                      :rules="[v => !!v || 'Email is required']"></v-text-field>
+                        <v-text-field required filled type="password" label="Password" v-model="user.password"
+                                      :rules="[v => !!v || 'Password is required']"></v-text-field>
 
-                    <v-divider class="mb-6 mt-6"></v-divider>
+                        <v-btn type="submit" @click="performLogin" color="primary">Login</v-btn>
 
-                    <p>
-                        New to Geo Timesheet?
-                        <router-link to="/register">Create an account</router-link>
-                    </p>
+                        <v-divider class="mb-6 mt-6"></v-divider>
 
-                </v-form>
+                        <p>
+                            New to Geo Timesheet?
+                            <router-link to="/register">Create an account</router-link>
+                        </p>
 
-            </v-card-text>
+                    </v-form>
 
-
-
-        </v-card>
+                </v-card-text>
 
 
+            </v-card>
 
-    </v-container>
 
-</div>
+        </v-container>
+
+    </div>
 </template>
 
 <script>
@@ -48,35 +54,45 @@ import {mapActions} from "vuex";
 
 export default {
     name: "Login",
-    data(){
+    data() {
         return {
-            user: {}
+            user: {},
+            error: false,
         }
     },
-    methods:{
+    methods: {
 
-        async performLogin(){
+        async performLogin(event) {
 
-            if(!this.$refs.loginForm.validate()){
+            event.preventDefault();
+
+            if (!this.$refs.loginForm.validate()) {
                 return;
             }
 
-            await this.login(this.user)
+            if (!await this.login(this.user)) {
+                return this.error = true;
+            }
+
+            await this.fetchUser();
+            await this.$router.push("/");
 
         },
 
-        ...mapActions("user", ["login"]),
+        ...mapActions("user", ["login", "fetchUser"]),
 
     },
 
-    beforeRouteLeave(to, from, next){
+    beforeRouteLeave(to, from, next) {
 
         const redirect = sessionStorage.getItem("redirect")
 
-        if(redirect){
+        if (redirect) {
             sessionStorage.removeItem("redirect");
-            next(redirect);
+            next(redirect.path);
         }
+
+        next()
 
     },
 }

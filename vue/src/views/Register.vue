@@ -3,6 +3,10 @@
 
         <v-container class="max-width">
 
+            <v-alert type="error" v-show="this.error" class="mb-6 mt-6">
+                There was a problem creating an account. Do you already have one?
+            </v-alert>
+
             <v-card class="mt-6">
 
                 <v-card-text>
@@ -14,9 +18,9 @@
                         <v-divider class="mb-6"></v-divider>
 
                         <v-text-field required filled label="Name" v-model="user.name" :rules="[v => !!v || 'Name is required']"></v-text-field>
-                        <v-text-field required filled label="Email" v-model="user.username" :rules="[v => !!v || 'Email is required']"></v-text-field>
+                        <v-text-field required filled label="Email" v-model="user.email" :rules="[v => !!v || 'Email is required']"></v-text-field>
                         <v-text-field required filled type="password" label="Password" v-model="user.password" :rules="[v => !!v || 'Password is required']"></v-text-field>
-                        <v-text-field required filled type="password" label="Confirm Password" v-model="user.passwordConfirm" :rules="[v => v === this.user.password || 'Password does not match']"></v-text-field>
+                        <v-text-field required filled type="password" label="Confirm Password" :rules="[v => v === this.user.password || 'Password does not match']"></v-text-field>
 
                         <v-btn @click="performRegister" color="primary" >Register</v-btn>
 
@@ -50,23 +54,29 @@ export default {
     name: "Register",
     data(){
         return {
-            user: {}
+            user: {},
+            error: false,
         }
     },
 
     methods:{
 
-        performRegister(){
+        async performRegister(){
 
             if(!this.$refs.registerForm.validate()){
                 return;
             }
 
-            this.register(this.user)
+            if(await this.register(this.user)){
+                this.error = true;
+            }
+
+            await this.fetchUser();
+            await this.$router.push("/");
 
         },
 
-        ...mapActions("user", ["register"]),
+        ...mapActions("user", ["register", "fetchUser"]),
 
     },
 
@@ -76,8 +86,10 @@ export default {
 
         if(redirect){
             sessionStorage.removeItem("redirect");
-            next(redirect);
+            next(redirect.path);
         }
+
+        next()
 
     },
 

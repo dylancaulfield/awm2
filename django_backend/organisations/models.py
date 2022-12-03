@@ -40,7 +40,7 @@ class OrganisationMember(models.Model):
 class Location(geomodels.Model):
     name = geomodels.CharField(max_length=50)
     bounds = geomodels.PolygonField()
-    organisation = geomodels.ForeignKey("Organisation", on_delete=geomodels.CASCADE)
+    organisation = geomodels.ForeignKey(Organisation, related_name="locations", on_delete=geomodels.CASCADE)
 
     def __str__(self):
         return f"{self.organisation.name} -> {self.name}"

@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 
 function isLoggedIn(to, from, next){
 
-    const user = sessionStorage.getItem("user");
+    const user = localStorage.getItem("user");
 
     if(!user) {
         sessionStorage.setItem("redirect", to);

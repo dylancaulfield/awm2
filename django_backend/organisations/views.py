@@ -10,7 +10,6 @@ from .models import Organisation, Member, OrganisationMember, Location, Timeshee
 
 from .serializer import OrganisationSerializer, MemberSerializer, OrganisationMemberSerializer
 
-@api_view(("POST",))
 def register(request):
     data = json.loads(request.body)
 
@@ -25,9 +24,9 @@ def register(request):
 
 
 @api_view(("GET",))
-def retrieve_organisations(request):
+def retrieve_user_organisations(request):
 
-    x = OrganisationMember.objects.select_related("organisation", "member", "member__user").filter(member__user=request.user)
+    x = OrganisationMember.objects.filter(member__user=request.user)
 
-    #serializer = UserSerializer(request.user, many=False)
-    return Response({"ok": "yes"}, status=status.HTTP_200_OK)
+    serializer = OrganisationMemberSerializer(x, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)

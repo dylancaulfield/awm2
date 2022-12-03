@@ -12,22 +12,19 @@ export default {
     },
 
     state: {
-        user: {
-            name: "Dylan Caulfield",
-            email: "dpcdylan@gmail.com"
-        },
-
-        authToken: null
+        user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+        authToken: localStorage.getItem("token")
     },
 
     mutations: {
 
         setUser(state, user){
-            localStorage.setItem("user", user);
+            localStorage.setItem("user", JSON.stringify(user));
             state.user = user;
         },
 
         setAuthToken(state, token){
+            localStorage.setItem("token", token);
             state.authToken = token;
         },
 
@@ -35,6 +32,7 @@ export default {
             state.user = {};
             state.authToken = null;
             localStorage.clear();
+            sessionStorage.clear();
         },
 
     },
@@ -43,8 +41,11 @@ export default {
 
         async fetchUser(context){
 
-            const response = await get("/api/auth/user")
-            context.commit("setUser", response);
+            const user = await get("/api/auth/user")
+            context.commit("setUser", {
+                name: user.first_name,
+                email: user.email
+            });
 
         },
 
@@ -53,7 +54,7 @@ export default {
             try {
 
                 const data = await post("/api/auth/token", loginRequest, false);
-                context.commit("setAuthToken", data);
+                context.commit("setAuthToken", data.token);
 
                 return true;
 
@@ -68,16 +69,13 @@ export default {
             try {
 
                 const data = await post("/api/auth/register", registerRequest, false);
-                context.commit("setAuthToken", data);
+                context.commit("setAuthToken", data.token);
 
                 return true;
 
             } catch (e){
                 return false;
             }
-
-
-
         },
 
         logout(context){

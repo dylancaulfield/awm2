@@ -8,4 +8,4 @@ WORKDIR /app
 
 ENV DOCKER=1
 
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "env", "python", "manage.py", "runserver", "8000"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "env", "gunicorn", "django_backend/wsgi.py"]
