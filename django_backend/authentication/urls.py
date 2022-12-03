@@ -5,5 +5,6 @@ from . import views
 
 urlpatterns = [
     path("token", authviews.obtain_auth_token),
+    path("register", views.register),
     path("user", views.retrieve_user)
 ]

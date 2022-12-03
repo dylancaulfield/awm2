@@ -10,7 +10,7 @@ services:
       - './postgres/postgres.env'
     networks:
       - backend
-    ports:
+    ports: # localhost only
       - "25432:5432"
 
   pgadmin:
@@ -41,10 +41,6 @@ services:
       dockerfile: ./django_backend/Dockerfile
     networks:
       - backend
-    ports:
-      - "8000:8000"
-  #   env_file:
-  #     - 'django.env'
 
 networks:
   backend:

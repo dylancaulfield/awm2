@@ -1,36 +1,51 @@
 <template>
-<div>
+    <div>
 
-    <v-container class="max-width">
+        <v-container class="max-width">
 
-        <v-card>
+            <v-alert type="error" v-show="this.error" class="mb-6 mt-6">Oops! No user found with those
+                credentials
+            </v-alert>
 
-            <v-card-text>
+            <v-alert dismissible type="info" v-show="this.$route.query.redirect" class="mb-6 mt-6">You must be
+                authenticated to access settings
+            </v-alert>
 
-                <v-form ref="loginForm" class="pt-4">
+            <v-card class="mt-6">
 
-                    <h1 class="mb-6">Login</h1>
+                <v-card-text>
 
-                    <v-divider class="mb-6"></v-divider>
+                    <v-form @submit="performLogin" ref="loginForm" class="pt-4">
 
-                    <v-text-field required filled label="Email" v-model="user.username" :rules="[v => !!v || 'Email is required']"></v-text-field>
-                    <v-text-field required filled type="password" label="Password" v-model="user.password" :rules="[v => !!v || 'Password is required']"></v-text-field>
+                        <h1 class="mb-6">Login</h1>
 
-                    <v-btn @click="performLogin" color="primary" >Login</v-btn>
+                        <v-divider class="mb-6"></v-divider>
 
-                </v-form>
+                        <v-text-field required filled type="email" label="Email" v-model="user.username"
+                                      :rules="[v => !!v || 'Email is required']"></v-text-field>
+                        <v-text-field required filled type="password" label="Password" v-model="user.password"
+                                      :rules="[v => !!v || 'Password is required']"></v-text-field>
 
-            </v-card-text>
+                        <v-btn type="submit" @click="performLogin" color="primary">Login</v-btn>
+
+                        <v-divider class="mb-6 mt-6"></v-divider>
+
+                        <p>
+                            New to Geo Timesheet?
+                            <router-link to="/register">Create an account</router-link>
+                        </p>
+
+                    </v-form>
+
+                </v-card-text>
 
 
-
-        </v-card>
-
+            </v-card>
 
 
-    </v-container>
+        </v-container>
 
-</div>
+    </div>
 </template>
 
 <script>
@@ -39,24 +54,45 @@ import {mapActions} from "vuex";
 
 export default {
     name: "Login",
-    data(){
+    data() {
         return {
-            user: {}
+            user: {},
+            error: false,
         }
     },
-    methods:{
+    methods: {
 
-        performLogin(){
+        async performLogin(event) {
 
-            if(!this.$refs.loginForm.validate()){
+            event.preventDefault();
+
+            if (!this.$refs.loginForm.validate()) {
                 return;
             }
 
-            this.login(this.user)
+            if (!await this.login(this.user)) {
+                return this.error = true;
+            }
+
+            await this.fetchUser();
+            await this.$router.push("/");
 
         },
 
-        ...mapActions("user", ["login"]),
+        ...mapActions("user", ["login", "fetchUser"]),
+
+    },
+
+    beforeRouteLeave(to, from, next) {
+
+        const redirect = sessionStorage.getItem("redirect")
+
+        if (redirect) {
+            sessionStorage.removeItem("redirect");
+            next(redirect.path);
+        }
+
+        next()
 
     },
 }
