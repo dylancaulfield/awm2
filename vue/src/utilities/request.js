@@ -1,10 +1,10 @@
 import axios from "axios";
 import userStore from "@/store/user"
 
-export async function get(url) {
+export async function get(url, token = true) {
 
     const headers = {};
-    if(userStore.state.authToken){
+    if(userStore.state.authToken && token){
         headers["Authorization"] = `Token ${userStore.state.authToken}`
     }
 
@@ -16,10 +16,10 @@ export async function get(url) {
 
 }
 
-export async function post(url, data) {
+export async function post(url, data, token = true) {
 
     const headers = {};
-    if(userStore.state.authToken){
+    if(userStore.state.authToken && token){
         headers["Authorization"] = `Token ${userStore.state.authToken}`
     }
 

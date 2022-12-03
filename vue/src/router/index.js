@@ -1,39 +1,65 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Main from '../views/Main.vue'
 
 Vue.use(VueRouter)
+
+function isLoggedIn(to, from, next){
+
+    const user = sessionStorage.getItem("user");
+
+    if(!user) {
+        sessionStorage.setItem("redirect", to);
+        return next({
+            path: "/login",
+            query: {
+                redirect: true
+            }
+        });
+    }
+
+    next();
+
+}
 
 const routes = [
     {
         path: '/',
-        name: 'Home',
-        component: Home
+        component: Main
     },
     {
         path: '/login',
-        name: 'Login',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
+        component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
     },
     {
         path: '/register',
-        name: 'Register',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/Register.vue')
+        component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
     },
     {
-        path: '/account',
-        name: 'Account',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/account/AccountHome.vue')
-    }
+        path: '/settings',
+        component: () => import(/* webpackChunkName: "settings" */ '../views/settings/Settings.vue'),
+
+        beforeEnter: isLoggedIn,
+    },
+    {
+        path: '/organisations',
+        component: () => import(/* webpackChunkName: "organisations" */ '../views/organisations/Organisations.vue'),
+
+        beforeEnter: isLoggedIn,
+    },
+    {
+        path: '/organisations/:id',
+        component: () => import(/* webpackChunkName: "organisation" */ '../views/organisations/Organisation.vue'),
+
+        beforeEnter: isLoggedIn,
+    },
+    {
+        path: '/organisations/:id/locations',
+        component: () => import(/* webpackChunkName: "organisationLocations" */ '../views/organisations/OrganisationLocations.vue'),
+
+        beforeEnter: isLoggedIn,
+    },
+
 ]
 
 const router = new VueRouter({

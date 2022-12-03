@@ -1,31 +1,40 @@
 import {get, post} from "@/utilities/request";
-import router from "@/router";
 
 // Store for user and csrf tokens
 export default {
 
     namespaced: true,
 
+    getters: {
+        isAuthenticated(state){
+            return !!state.user.name;
+        }
+    },
+
     state: {
-        user: {name: "Yvonne"},
+        user: {
+            name: "Dylan Caulfield",
+            email: "dpcdylan@gmail.com"
+        },
+
         authToken: null
     },
 
     mutations: {
 
         setUser(state, user){
-            state.user = user
+            localStorage.setItem("user", user);
+            state.user = user;
         },
 
         setAuthToken(state, token){
-            state.authToken = token
+            state.authToken = token;
         },
 
         clearUser(state){
             state.user = {};
             state.authToken = null;
-            localStorage.setItem("user", null);
-            localStorage.setItem("authToken", null);
+            localStorage.clear();
         },
 
     },
@@ -41,13 +50,33 @@ export default {
 
         async login(context, loginRequest){
 
-            const data = await post("/api/auth/token", loginRequest);
-            context.commit("setAuthToken", data.token);
+            try {
 
-            const response = await get("/api/auth/user")
-            context.commit("setUser", response);
+                const data = await post("/api/auth/token", loginRequest, false);
+                context.commit("setAuthToken", data);
 
-            await router.push("/");
+                return true;
+
+            } catch (e){
+                return false;
+            }
+
+        },
+
+        async register(context, registerRequest){
+
+            try {
+
+                const data = await post("/api/auth/register", registerRequest, false);
+                context.commit("setAuthToken", data);
+
+                return true;
+
+            } catch (e){
+                return false;
+            }
+
+
 
         },
 

@@ -29,6 +29,11 @@ ALLOWED_HOSTS = [
     "host.docker.internal"
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://localhost",
+    "https://awm2.dylancaulfield.ie"
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,7 +47,8 @@ INSTALLED_APPS = [
     'rest_framework_gis',
     'rest_framework.authtoken',
     'rest_framework',
-    'authentication'
+    'authentication',
+    'organisations'
 ]
 
 REST_FRAMEWORK = {

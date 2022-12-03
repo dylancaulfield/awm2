@@ -3,6 +3,8 @@
 
     <v-container class="max-width">
 
+        <v-alert dismissible type="info" v-show="this.$route.query.redirect" class="mb-6 mt-6">You must be authenticated to access settings</v-alert>
+
         <v-card class="mt-6">
 
             <v-card-text>
@@ -53,17 +55,28 @@ export default {
     },
     methods:{
 
-        performLogin(){
+        async performLogin(){
 
             if(!this.$refs.loginForm.validate()){
                 return;
             }
 
-            this.login(this.user)
+            await this.login(this.user)
 
         },
 
         ...mapActions("user", ["login"]),
+
+    },
+
+    beforeRouteLeave(to, from, next){
+
+        const redirect = sessionStorage.getItem("redirect")
+
+        if(redirect){
+            sessionStorage.removeItem("redirect");
+            next(redirect);
+        }
 
     },
 }

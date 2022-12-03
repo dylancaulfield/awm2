@@ -18,7 +18,7 @@
                         <v-text-field required filled type="password" label="Password" v-model="user.password" :rules="[v => !!v || 'Password is required']"></v-text-field>
                         <v-text-field required filled type="password" label="Confirm Password" v-model="user.passwordConfirm" :rules="[v => v === this.user.password || 'Password does not match']"></v-text-field>
 
-                        <v-btn @click="performLogin" color="primary" >Register</v-btn>
+                        <v-btn @click="performRegister" color="primary" >Register</v-btn>
 
                         <v-divider class="mb-6 mt-6"></v-divider>
 
@@ -53,9 +53,10 @@ export default {
             user: {}
         }
     },
+
     methods:{
 
-        performLogin(){
+        performRegister(){
 
             if(!this.$refs.registerForm.validate()){
                 return;
@@ -68,6 +69,18 @@ export default {
         ...mapActions("user", ["register"]),
 
     },
+
+    beforeRouteLeave(to, from, next){
+
+        const redirect = sessionStorage.getItem("redirect")
+
+        if(redirect){
+            sessionStorage.removeItem("redirect");
+            next(redirect);
+        }
+
+    },
+
 }
 </script>
 

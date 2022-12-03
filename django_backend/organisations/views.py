@@ -1,22 +1,14 @@
 import json
 
 from django.contrib.auth.models import User
-from django.http import HttpResponse
-from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
-from authentication.serializer import UserSerializer
+from .models import Organisation, Member, OrganisationMember, Location, TimesheetEntry
 
-# Get a token
-# POST /api/auth/token
-# {
-#   "username": email,
-#   "password": password
-# }
-
+from .serializer import OrganisationSerializer, MemberSerializer, OrganisationMemberSerializer
 
 @api_view(("POST",))
 def register(request):
@@ -33,6 +25,9 @@ def register(request):
 
 
 @api_view(("GET",))
-def retrieve_user(request):
-    serializer = UserSerializer(request.user, many=False)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+def retrieve_organisations(request):
+
+    x = OrganisationMember.objects.select_related("organisation", "member", "member__user").filter(member__user=request.user)
+
+    #serializer = UserSerializer(request.user, many=False)
+    return Response({"ok": "yes"}, status=status.HTTP_200_OK)

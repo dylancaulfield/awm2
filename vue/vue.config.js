@@ -1,6 +1,9 @@
 module.exports = {
   devServer:{
-    https: false
+    disableHostCheck: true,
+    https: false,
+    host: "localhost",
+    proxy: "https://localhost"
   },
   transpileDependencies: [
     'vuetify'
