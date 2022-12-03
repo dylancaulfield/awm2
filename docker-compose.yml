@@ -10,6 +10,8 @@ services:
       - './postgres/postgres.env'
     networks:
       - backend
+    ports:
+      - "25432:5432"
 
   pgadmin:
     container_name: awm2_pgadmin
