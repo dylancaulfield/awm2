@@ -9,12 +9,12 @@
 </template>
 
 <script>
-import QrcodeVue from "qrcode.vue";
+///import QrcodeVue from "qrcode.vue";
 
 export default {
     name: "Organisation",
     components: {
-        QrcodeVue
+        //QrcodeVue
     }
 }
 </script>
