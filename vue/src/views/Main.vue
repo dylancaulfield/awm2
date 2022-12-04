@@ -42,121 +42,35 @@
         </div>
 
         <div v-show="isAuthenticated">
-            <LMap @click="savePosition" ref="map" class="map" :zoom="zoom" :center="center" :options="options">
-                <LTileLayer title="Title" :url="url" :attribution="attribution"></LTileLayer>
 
-                <LMarker :lat-lng="center"></LMarker>
-
-                <div :key="org.id" v-for="org in organisations">
-
-                    <LPolygon :key="loc.id" v-for="loc in org.locations" :lat-lngs="loc.bounds"></LPolygon>
-
-                </div>
-
-
-
-            </LMap>
-
-            <div class="overlay">
-
-                <v-container fluid>
-
-                    <v-card min-width="200" max-width="100%">
-                        <v-card-title>Title</v-card-title>
-                    </v-card>
-
-                </v-container>
-
-            </div>
-
+            <TimesheetMap></TimesheetMap>
 
         </div>
-
 
     </div>
 </template>
 
 <script>
-//import L from "leaflet"
-import {LMap, LTileLayer, LMarker, LPolygon} from "vue2-leaflet";
-//import {latLng} from "leaflet";
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapGetters} from "vuex";
+import TimesheetMap from "@/components/TimesheetMap";
 
 
 export default {
     components: {
-        LMap,
-        LTileLayer,
-        LMarker,
-        LPolygon
+        TimesheetMap
     },
     data() {
-        return {
-            url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            attribution:
-                '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-            zoom: 10,
-            center: [53.3498, 6.2603],
-            options: {
-                zoomControl: false
-            },
-            coords: []
-        }
+        return {}
     },
 
-    async beforeMount() {
-
-        if (localStorage.getItem("token")){
-            await this.fetchOrganisations();
-        }
-
-    },
-
-    methods: {
-
-        savePosition(e) {
-
-            console.log(e);
-
-            this.coords.push(e.latlng);
-            this.center = e.latlng;
-
-            // if (navigator.geolocation) {
-            //     navigator.geolocation.getCurrentPosition(p => {
-            //
-            //         this.center = new latLng(p.coords.latitude, p.coords.longitude)
-            //
-            //         this.$refs.map.setCenter(this.center)
-            //
-            //     })
-            // }
-
-        },
-
-        ...mapActions("organisations", ["fetchOrganisations"])
-
-    },
+    methods: {},
     computed: {
         ...mapGetters("user", ["isAuthenticated"]),
-        ...mapState("organisations", ["organisations"])
     }
 }
 </script>
 
 <style scoped>
 
-.map {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-
-.overlay {
-    position: absolute;
-    z-index: 2;
-}
 
 </style>

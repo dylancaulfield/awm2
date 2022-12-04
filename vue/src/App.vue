@@ -25,7 +25,7 @@
             app
             color="primary"
             dark
-            hide-on-scroll
+            height="60px"
         >
 
             <router-link class="white--text" style="text-decoration: none" to="/">

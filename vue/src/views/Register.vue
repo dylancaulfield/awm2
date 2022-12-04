@@ -11,7 +11,7 @@
 
                 <v-card-text>
 
-                    <v-form ref="registerForm" class="pt-4">
+                    <v-form @submit="performRegister" ref="registerForm" class="pt-4">
 
                         <h1 class="mb-6">Create An Account</h1>
 
@@ -22,7 +22,7 @@
                         <v-text-field required filled type="password" label="Password" v-model="user.password" :rules="[v => !!v || 'Password is required']"></v-text-field>
                         <v-text-field required filled type="password" label="Confirm Password" :rules="[v => v === this.user.password || 'Password does not match']"></v-text-field>
 
-                        <v-btn @click="performRegister" color="primary" >Register</v-btn>
+                        <v-btn type="submit" @click="performRegister" color="primary" >Register</v-btn>
 
                         <v-divider class="mb-6 mt-6"></v-divider>
 
@@ -35,11 +35,7 @@
 
                 </v-card-text>
 
-
-
             </v-card>
-
-
 
         </v-container>
 
@@ -61,7 +57,9 @@ export default {
 
     methods:{
 
-        async performRegister(){
+        async performRegister(event){
+
+            event.preventDefault();
 
             if(!this.$refs.registerForm.validate()){
                 return;
