@@ -50,9 +50,9 @@
                 <v-icon>mdi-crosshairs-gps</v-icon>
             </v-btn>
 
-            <v-sheet class="bottom secondary">
+            <v-sheet @click="goToTimesheet" class="bottom secondary" v-show="this.numberOfLocationsUserIsIn > 0">
                 <h3 class="text-center white--text">
-                    Clock In/Out: {{ "0" }} Location{{ 0 == 0 ? "s" : "s" }}
+                    Clock In/Out: {{ this.numberOfLocationsUserIsIn }} Location{{ this.numberOfLocationsUserIsIn === 1 ? "" : "s" }}
                     <v-icon class="white--text">mdi-arrow-right-thick</v-icon>
                 </h3>
             </v-sheet>
@@ -78,7 +78,6 @@ export default {
             attribution:
                 '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             zoom: 10,
-            location: null,
             options: {
                 zoomControl: false
             },
@@ -100,7 +99,7 @@ export default {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(p => {
 
-                        this.location = new latLng(p.coords.latitude, p.coords.longitude)
+                        this.setLocation(new latLng(p.coords.latitude, p.coords.longitude))
 
                     },
                     this.showNoLocationDialog)
@@ -110,11 +109,15 @@ export default {
 
         },
 
+        goToTimesheet(){
+            this.$router.push("/timesheet");
+        },
+
         showNoLocationDialog() {
             this.dialog = true;
         },
 
-        ...mapActions("organisations", ["fetchOrganisations"])
+        ...mapActions("organisations", ["fetchOrganisations", "setLocation"]),
 
     },
     computed: {
@@ -128,8 +131,15 @@ export default {
             return new latLng(53.350140, -6.266155)
         },
 
-        ...mapState("organisations", ["organisations"]),
+        numberOfLocationsUserIsIn(){
+
+            return this.getLocationsUserIsIn.length;
+
+        },
+
+        ...mapState("organisations", ["organisations", "location"]),
         ...mapGetters("user", ["isAuthenticated"]),
+        ...mapGetters("organisations", ["getLocationsUserIsIn"])
     }
 }
 </script>

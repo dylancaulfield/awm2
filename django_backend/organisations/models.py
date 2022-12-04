@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.gis.db import models as geomodels
 from django.contrib.auth.models import User
@@ -47,7 +49,7 @@ class Location(geomodels.Model):
 
 
 class TimesheetEntry(models.Model):
-    start = models.DateTimeField()
+    start = models.DateTimeField(default=datetime.now)
     finish = models.DateTimeField(null=True, blank=True)
     location = models.ForeignKey("Location", on_delete=models.CASCADE)
     member = models.ForeignKey("Member", on_delete=models.CASCADE)

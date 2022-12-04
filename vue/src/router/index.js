@@ -59,6 +59,12 @@ const routes = [
 
         beforeEnter: isLoggedIn,
     },
+    {
+        path: '/timesheet',
+        component: () => import(/* webpackChunkName: "organisationLocations" */ '../views/organisations/TimesheetEntry.vue'),
+
+        beforeEnter: isLoggedIn,
+    },
 
 ]
 

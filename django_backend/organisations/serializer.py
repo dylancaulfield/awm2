@@ -8,6 +8,21 @@ class LocationSerializer(serializers.ModelSerializer):
         exclude = ["organisation"]
 
 
+class OrganisationOnlySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Organisation
+        fields = '__all__'
+
+
+class LocationWithOrganisationSerializer(serializers.ModelSerializer):
+    organisation = OrganisationOnlySerializer()
+
+    class Meta:
+        model = Location
+        exclude = ["bounds"]
+
+
 class OrganisationSerializer(serializers.ModelSerializer):
     locations = LocationSerializer(many=True)
 
@@ -32,7 +47,9 @@ class OrganisationMemberSerializer(serializers.ModelSerializer):
 
 
 class TimesheetEntrySerializer(serializers.ModelSerializer):
+    location = LocationWithOrganisationSerializer()
+
     class Meta:
         model = TimesheetEntry
-        fields = '__all__'
+        exclude = ["member"]
 

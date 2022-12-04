@@ -22,6 +22,8 @@ services:
       - './postgres/pgadmin.env'
     networks:
       - backend
+    ports:
+      - "8001:80"
 
   django:
     container_name: awm2_django

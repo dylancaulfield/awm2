@@ -35,3 +35,23 @@ export async function post(url, data, token = true) {
     return response.data;
 
 }
+
+export async function put(url, data, token = true) {
+
+    const headers = {};
+    if(userStore.state.authToken && token){
+        headers["Authorization"] = `Token ${userStore.state.authToken}`
+    }
+
+    const response = await axios.put(
+        url,
+        data,
+        {
+            headers,
+            withCredentials: true
+        }
+    )
+
+    return response.data;
+
+}
