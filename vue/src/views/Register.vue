@@ -84,7 +84,7 @@ export default {
 
         if(redirect){
             sessionStorage.removeItem("redirect");
-            next(redirect.path);
+            return next(JSON.parse(redirect));
         }
 
         next()

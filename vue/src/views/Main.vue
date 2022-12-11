@@ -7,8 +7,7 @@
 
                 <h1>Welcome to GeoTimesheet</h1>
 
-                <p>GeoTimesheet allows you to track your employees time and only allows them to clock in when they are
-                    in a location set by you</p>
+                <p>GeoTimesheet allows you to create an organisation and track when members clock in or out of the location</p>
 
                 <h2>How it works</h2>
 
@@ -26,6 +25,7 @@
                         </template>
                         <span>A virtual perimeter around an area on a map</span>
                     </v-tooltip>
+                    associated with a location and when users are within the area of the location they will be able to clock in/out.
                 </p>
 
                 <router-link to="/register">

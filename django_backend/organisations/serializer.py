@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from .models import Organisation, Member, OrganisationMember, Location, TimesheetEntry
 
 
@@ -31,14 +32,7 @@ class OrganisationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MemberSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Member
-        fields = '__all__'
-
-
 class OrganisationMemberSerializer(serializers.ModelSerializer):
-    #member = MemberSerializer()
     organisation = OrganisationSerializer()
 
     class Meta:
@@ -53,3 +47,25 @@ class TimesheetEntrySerializer(serializers.ModelSerializer):
         model = TimesheetEntry
         exclude = ["member"]
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["first_name"]
+
+
+class MemberSerializer(serializers.ModelSerializer):
+    timesheets = TimesheetEntrySerializer(many=True)
+    user = UserSerializer()
+
+    class Meta:
+        model = Member
+        fields = "__all__"
+
+
+class OrganisationMemberDataSerializer(serializers.ModelSerializer):
+    member = MemberSerializer()
+
+    class Meta:
+        model = OrganisationMember
+        exclude = ["id", "organisation"]

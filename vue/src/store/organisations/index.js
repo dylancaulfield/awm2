@@ -1,4 +1,4 @@
-import {get} from "@/utilities/request";
+import {get, post} from "@/utilities/request";
 import {latLng} from "leaflet";
 import pip from "robust-point-in-polygon";
 
@@ -10,6 +10,7 @@ export default {
         organisations: [],
         clockedIn: [],
         location: null,
+        organisationMembers: []
     },
 
     getters: {
@@ -57,11 +58,11 @@ export default {
         saveOrganisations(state, orgs) {
 
             state.organisations = orgs.map(o => {
+
                 return {
                     id: o.organisation.id,
                     name: o.organisation.name,
                     code: o.organisation.code,
-                    userIsAdmin: o.admin,
                     locations: o.organisation.locations.map(l => {
                         return {
                             id: l.id,
@@ -70,6 +71,30 @@ export default {
                         }
                     })
                 }
+            });
+
+        },
+
+        saveOrganisationMemberData(state, members, organisationCode){
+
+            state.organisationMembers = members.map(m => {
+
+                return {
+                    id: m.member.id,
+                    name: m.member.user.first_name,
+                    timesheets: m.member.timesheets
+                        .filter(t => t.location.organisation.code === organisationCode)
+                        .map(t => {
+
+                            return {
+                                start: t.start,
+                                finish: t.finish,
+                                location: t.location.name
+                            }
+
+                        })
+                }
+
             });
 
         },
@@ -86,22 +111,31 @@ export default {
 
     actions: {
 
-        async fetchOrganisations(context) {
+        async fetchOrganisations({commit}) {
 
             const organisations = await get("/api/organisations");
-            context.commit("saveOrganisations", organisations);
+            commit("saveOrganisations", organisations);
 
         },
 
-        async fetchClockedIn(context) {
+        async fetchClockedIn({commit}) {
 
             const entries = await get("/api/organisations/timesheets");
-            context.commit("saveClockedIn", entries);
+            commit("saveClockedIn", entries);
 
         },
 
-        setLocation(context, location) {
-            context.commit("setLocation", location);
+        async fetchOrganisationMemberData({commit}, organisationCode){
+
+            const members = await post("/api/organisations/members", {
+                organisationCode
+            });
+            commit("saveOrganisationMemberData", members, organisationCode);
+
+        },
+
+        setLocation({commit}, location) {
+            commit("setLocation", location);
         }
 
     }

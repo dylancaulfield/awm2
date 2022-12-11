@@ -55,7 +55,7 @@
                 </v-list>
             </v-menu>
 
-            <router-link to="/settings" v-show="!isSettings">
+            <router-link to="/organisations" v-show="!isSettings">
                 <v-btn icon>
                     <v-icon>mdi-cog-outline</v-icon>
                 </v-btn>
@@ -73,6 +73,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import router from "@/router";
 
 export default {
     name: 'App',
@@ -93,15 +94,6 @@ export default {
         ]
     }),
 
-    mounted() {
-
-        // if(localStorage.getItem("token")){
-        //     this.fetchUser();
-        //     this.fetchOrganisations();
-        // }
-
-    },
-
     computed:{
 
         isSettings(){
@@ -114,10 +106,10 @@ export default {
 
     methods: {
 
-        async logout(){
+        logout(){
 
-            await this.user.logout();
-            await this.$router.push("/")
+            this.user.logout();
+            router.push("/");
 
         },
 

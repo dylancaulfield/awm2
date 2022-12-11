@@ -7,7 +7,7 @@
 
             <div :key="org.id" v-for="org in organisations">
 
-                <LPolygon :key="loc.id" v-for="loc in org.locations" :lat-lngs="loc.bounds"></LPolygon>
+                <LPolygon :key="i" v-for="(loc, i) in org.locations" :lat-lngs="loc.bounds"></LPolygon>
 
             </div>
 

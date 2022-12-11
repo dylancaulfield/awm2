@@ -9,7 +9,7 @@ function isLoggedIn(to, from, next){
     const user = localStorage.getItem("user");
 
     if(!user) {
-        sessionStorage.setItem("redirect", to);
+        sessionStorage.setItem("redirect", JSON.stringify(to));
         return next({
             path: "/login",
             query: {
@@ -36,26 +36,20 @@ const routes = [
         component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
     },
     {
-        path: '/settings',
-        component: () => import(/* webpackChunkName: "settings" */ '../views/settings/Settings.vue'),
-
-        beforeEnter: isLoggedIn,
-    },
-    {
         path: '/organisations',
         component: () => import(/* webpackChunkName: "organisations" */ '../views/organisations/Organisations.vue'),
 
         beforeEnter: isLoggedIn,
     },
     {
-        path: '/organisations/:id',
-        component: () => import(/* webpackChunkName: "organisation" */ '../views/organisations/Organisation.vue'),
+        path: '/organisations/join',
+        component: () => import(/* webpackChunkName: "organisation" */ '../views/organisations/OrganisationJoin.vue'),
 
         beforeEnter: isLoggedIn,
     },
     {
-        path: '/organisations/:id/locations',
-        component: () => import(/* webpackChunkName: "organisationLocations" */ '../views/organisations/OrganisationLocations.vue'),
+        path: '/organisations/:code',
+        component: () => import(/* webpackChunkName: "organisation" */ '../views/organisations/Organisation.vue'),
 
         beforeEnter: isLoggedIn,
     },
@@ -70,7 +64,7 @@ const routes = [
 
 const router = new VueRouter({
     routes,
-    mode: "history"
+    mode: "hash"
 });
 
 export default router

@@ -30,7 +30,6 @@ class Member(models.Model):
 class OrganisationMember(models.Model):
     organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE)
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
-    admin = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('organisation', 'member')
@@ -52,7 +51,7 @@ class TimesheetEntry(models.Model):
     start = models.DateTimeField(default=datetime.now)
     finish = models.DateTimeField(null=True, blank=True)
     location = models.ForeignKey("Location", on_delete=models.CASCADE)
-    member = models.ForeignKey("Member", on_delete=models.CASCADE)
+    member = models.ForeignKey("Member", related_name="timesheets", on_delete=models.CASCADE)
 
     def __str__(self):
         return f"[{self.location.name}] {self.member.user.first_name} @ {self.start}"
