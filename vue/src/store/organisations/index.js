@@ -1,6 +1,6 @@
 import {get, post} from "@/utilities/request";
 import {latLng} from "leaflet";
-import pip from "robust-point-in-polygon";
+import pip from "point-in-polygon";
 
 export default {
 
@@ -36,8 +36,10 @@ export default {
 
                 for (let loc of org.locations) {
 
-                    const bounds = loc.bounds.map(ll => [ll.lat, ll.lng])
-                    if (!pip(bounds, currentLocation)) {
+                    let bounds = loc.bounds.map(ll => [ll.lat, ll.lng]);
+                    bounds.pop();
+
+                    if (!pip(currentLocation, bounds)) {
                         continue;
                     }
 
@@ -75,7 +77,7 @@ export default {
 
         },
 
-        saveOrganisationMemberData(state, members, organisationCode){
+        saveOrganisationMemberData(state, {members, organisationCode}){
 
             state.organisationMembers = members.map(m => {
 
@@ -96,6 +98,7 @@ export default {
                 }
 
             });
+
 
         },
 
@@ -130,7 +133,10 @@ export default {
             const members = await post("/api/organisations/members", {
                 organisationCode
             });
-            commit("saveOrganisationMemberData", members, organisationCode);
+            commit("saveOrganisationMemberData", {
+                members,
+                organisationCode
+            });
 
         },
 

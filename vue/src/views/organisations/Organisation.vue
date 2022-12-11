@@ -3,6 +3,8 @@
 
         <v-container class="max-width">
 
+            <v-btn color="secondary" class="mb-4" @click="goBack">Back</v-btn>
+
             <v-card>
 
                 <v-card-title>
@@ -19,7 +21,9 @@
 
                     <v-divider class="my-4"></v-divider>
 
-                    <v-btn color="primary" class="mb-4">Create</v-btn>
+                    <router-link :to="`/organisations/${thisOrganisation.code}/create-location`">
+                        <v-btn color="primary" class="mb-4">Create Location</v-btn>
+                    </router-link>
 
                     <h3>Locations ({{thisOrganisation.locations.length}})</h3>
 
@@ -87,7 +91,7 @@ export default {
 
         thisOrganisation(){
 
-            return this.organisations.filter(o => o.code = this.$route.params.code)[0];
+            return this.organisations.filter(o => o.code === this.$route.params.code)[0];
 
         },
 
@@ -99,6 +103,10 @@ export default {
     },
 
     methods: {
+
+        goBack(){
+            this.$router.go(-1);
+        },
 
         ...mapActions("organisations", ["fetchOrganisations", "fetchOrganisationMemberData"])
 

@@ -37,14 +37,15 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn
+                            text
                             color="primary"
                             @click="create"
                         >
                             Create
                         </v-btn>
                         <v-btn
-                            outlined
-                            color="error"
+                            text
+                            color="secondary"
                             @click="dialog = false"
                         >
                             Cancel

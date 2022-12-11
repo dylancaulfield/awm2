@@ -7,7 +7,7 @@
 
                 <h1>Welcome to GeoTimesheet</h1>
 
-                <p>GeoTimesheet allows you to create an organisation and track when members clock in or out of the location</p>
+                <p>GeoTimesheet allows you to create an organisation and track when members clock in or out of a location</p>
 
                 <h2>How it works</h2>
 
@@ -25,7 +25,7 @@
                         </template>
                         <span>A virtual perimeter around an area on a map</span>
                     </v-tooltip>
-                    associated with a location and when users are within the area of the location they will be able to clock in/out.
+                    associated with a location and when users are within the bounds of the location they will be able to clock in/out.
                 </p>
 
                 <router-link to="/register">

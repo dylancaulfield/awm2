@@ -3,6 +3,8 @@
 
         <v-container class="max-width">
 
+            <v-btn color="secondary" class="mb-4" @click="goBack">Back</v-btn>
+
             <v-alert v-show="error" type="error">Could not join organisation with provided code</v-alert>
 
             <v-card>
@@ -35,6 +37,10 @@ export default {
     components: {},
 
     methods: {
+
+        goBack(){
+            this.$router.go(-1);
+        },
 
         async join() {
 

@@ -6,7 +6,7 @@
             <v-card :key="i" v-for="(loc, i) in locations" class="mt-8">
                 <v-card-title>{{loc.name}}</v-card-title>
                 <v-card-subtitle>{{loc.organisation}}</v-card-subtitle>
-                <v-card-text v-show="loc.startTime">Started at {{loc.startTime}}</v-card-text>
+                <v-card-text v-show="loc.startTime">Started at {{new Date(loc.startTime).toLocaleString()}}</v-card-text>
                 <v-card-actions>
                     <v-btn @click="clockIn(loc.id)" v-if="!loc.startTime" color="primary">Clock in</v-btn>
                     <v-btn @click="clockOut(loc.entryId)" v-if="loc.startTime" color="secondary">Clock out</v-btn>

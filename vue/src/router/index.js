@@ -29,33 +29,45 @@ const routes = [
     },
     {
         path: '/login',
-        component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
+        component: () => import(/* webpackChunkName: "Login" */ '../views/Login.vue')
     },
     {
         path: '/register',
-        component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
+        component: () => import(/* webpackChunkName: "Register" */ '../views/Register.vue')
     },
     {
         path: '/organisations',
-        component: () => import(/* webpackChunkName: "organisations" */ '../views/organisations/Organisations.vue'),
+        component: () => import(/* webpackChunkName: "Organisations" */ '../views/organisations/Organisations.vue'),
 
         beforeEnter: isLoggedIn,
     },
     {
         path: '/organisations/join',
-        component: () => import(/* webpackChunkName: "organisation" */ '../views/organisations/OrganisationJoin.vue'),
+        component: () => import(/* webpackChunkName: "OrganisationJoin" */ '../views/organisations/OrganisationJoin.vue'),
 
         beforeEnter: isLoggedIn,
     },
     {
         path: '/organisations/:code',
-        component: () => import(/* webpackChunkName: "organisation" */ '../views/organisations/Organisation.vue'),
+        component: () => import(/* webpackChunkName: "Organisation" */ '../views/organisations/Organisation.vue'),
+
+        beforeEnter: isLoggedIn,
+    },
+    {
+        path: '/organisations/:code/create-location',
+        component: () => import(/* webpackChunkName: "LocationCreate" */ '../views/organisations/LocationCreate.vue'),
+
+        beforeEnter: isLoggedIn,
+    },
+    {
+        path: '/organisations/:code/members/:memberId',
+        component: () => import(/* webpackChunkName: "OrganisationMemberTimesheets" */ '../views/organisations/OrganisationMemberTimesheets.vue'),
 
         beforeEnter: isLoggedIn,
     },
     {
         path: '/timesheet',
-        component: () => import(/* webpackChunkName: "organisationLocations" */ '../views/organisations/TimesheetEntry.vue'),
+        component: () => import(/* webpackChunkName: "TimesheetEntry" */ '../views/organisations/TimesheetEntry.vue'),
 
         beforeEnter: isLoggedIn,
     },
