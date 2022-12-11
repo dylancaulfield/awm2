@@ -13,18 +13,6 @@ services:
     ports:
       - "25432:5432"
 
-  pgadmin:
-    container_name: awm2_pgadmin
-    image: dpage/pgadmin4
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    env_file:
-      - './postgres/pgadmin.env'
-    networks:
-      - backend
-    ports:
-      - "8001:80"
-
   django:
     container_name: awm2_django
     build:
@@ -49,4 +37,3 @@ networks:
 
 volumes:
   postgresdb:
-  pgadmin:
