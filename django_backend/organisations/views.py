@@ -5,6 +5,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from django.contrib.gis.geos import Polygon
+
 from .models import Organisation, Member, OrganisationMember, Location, TimesheetEntry
 
 from .serializer import OrganisationMemberDataSerializer, OrganisationMemberSerializer, \
@@ -47,23 +49,17 @@ def create_organisation(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# TODO
 @api_view(("POST",))
 def create_organisation_location(request):
     data = json.loads(request.body)
 
-    organisation = Organisation.objects.create(name=data["name"])
-    organisation.save()
+    organisation = Organisation.objects.get(code=data["organisationCode"])
+    polygon = Polygon(data["bounds"])
 
-    member = Member.objects.filter(user=request.user).first()
-    if member is None:
-        member = Member.objects.create(user=request.user)
+    location = Location.objects.create(name=data["name"], bounds=polygon, organisation=organisation)
+    location.save()
 
-    organisation_member = OrganisationMember.objects.create(member=member, organisation=organisation)
-    organisation_member.save()
-
-    serializer = OrganisationOnlySerializer(organisation)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(location.id, status=status.HTTP_200_OK)
 
 @api_view(("POST",))
 def user_join_organisation(request):

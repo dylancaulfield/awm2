@@ -63,6 +63,7 @@ class MemberSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# All members of an organisation and their timesheet data
 class OrganisationMemberDataSerializer(serializers.ModelSerializer):
     member = MemberSerializer()
 
