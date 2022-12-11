@@ -96,7 +96,7 @@ export default {
         },
 
         qr(){
-            return `${location.protocol}//${location.hostname}/organisations/join?code=${this.thisOrganisation.code}`;
+            return `${location.protocol}//${location.hostname}#/organisations/join?code=${this.thisOrganisation.code}`;
         },
 
         ...mapState("organisations", ["organisations", "organisationMembers"]),
